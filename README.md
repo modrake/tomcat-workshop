@@ -11,28 +11,26 @@ After successfully completing this workshop, you will be able to:
 * Build something in Chef with very little guidance
 * Write custom Chef recipes.
 * Use the [Chef Documentation](http://docs.opscode.com) to identify and use resources that will help you model the desired state of your infrastructure.
-* Include [guards](http://docs.getchef.com/chef/resources.html#guards) in Chef resources.
 
 ## Pre-requisites
 
 Before beginning you will need:
 
-* A virtual machine or server running CentOS 7.0 or later
+* A virtual machine or server running CentOS 6.7 or similar
 * Some experience using Chef such as:
   * completing the exercises on [Learn Chef](http://learn.chef.io)
   * completing a Chef Essentials workshop
   * real-world experience working with Chef
 * Chef DK or chef-client installed
+* Docker installed and configured along with the kitchen-docker gem
 * A text editor
-* A version control system
 
 ## Completion Criteria
 
 You'll know this project is complete when:
 
-* You can interact with the tomcat site in a browser
+* Your tests report a successful response from your Tomcat site
 * You can run chef-client multiple times without failures
-* Your source code repository shows the history of your work
 
 ## Next steps
 
@@ -42,7 +40,7 @@ You can take expand on this project a number of ways including:
   * Use [Test Kitchen](http://kitchen.ci) to validate your chef-client runs
   * Add static code analysis using [Rubocop](https://github.com/bbatsov/rubocop) and [Food Critic](foodcritic.io)
   * Add [ChefSpec](http://sethvargo.github.io/chefspec/) tests
-  * Add [Serverspec](http://serverspec.org/) tests
+  * Add [Inspec](http://inspec.io/) tests
   * Add a continuous integration server, such as Jenkins
 
 * Refactoring Recipes
@@ -59,18 +57,12 @@ Cookbooks are best when they map 1:1 to a piece of software. The cookbook create
 
 The community has created cookbooks that accomplish similar goals. Select a group of resources, recipe, or cookbook and replace it with the equivalent community cookbook.
 
-* [Light-Weight Resource Provider](https://docs.getchef.com/lwrp.html)
+* [Custom Resources](https://docs.chef.io/custom_resources.html)
 
-Within your cookbook several resources that act in concert together can be grouped together as a recipe. Sometimes it makes sense to use a series of resources as a template. Light-Weight Resource Providers (LWRP) grant you that ability.
+Within your cookbook several resources that act in concert together can be grouped together as a recipe. Sometimes it makes sense to use a series of resources as a template. Custom Resources  grant you that ability.
 
-Update your current resources, recipes, and cookbooks to implement a LWRP where it feels like you may want to use that same series of resources again with a different set of parameters.
+Update your current resources, recipes, and cookbooks to implement a custom resource where it feels like you may want to use that same series of resources again with a different set of parameters.
 
 * Multi-OS support
 
 The installation instructions were defined for a CentOS Operating System (OS). Attempt a deployment on a node with a different OS. Update the resources, recipes, and cookbooks so that you can deploy on Ubuntu? Redhat? Amazon?
-
-## Examples
-
-Here are some examples of this project being implemented by other workshop participants.  (See the "Contributing" section of the README for details on how to add your example.)
-
-* Submit your link to a repo with a description of the implementation details

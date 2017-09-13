@@ -1,23 +1,39 @@
-# Systemd unit file for tomcat
-[Unit]
-Description=Apache Tomcat Web Application Container
-After=syslog.target network.target
+#!/bin/bash
+# description: Tomcat Start Stop Restart
+# processname: tomcat
+# chkconfig: 234 20 80
+NAME=tomcat
+JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.151.x86_64
+export JAVA_HOME
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:$JAVA_HOME/bin:$PATH
+export PATH
+CATALINA_HOME=/opt/tomcat
 
-[Service]
-Type=forking
+tomcat_pid() {
+  `pgrep -f $NAME`
+}
 
-Environment=JAVA_HOME=/usr/lib/jvm/jre
-Environment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid
-Environment=CATALINA_HOME=/opt/tomcat
-Environment=CATALINA_BASE=/opt/tomcat
-Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
-Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
-
-ExecStart=/opt/tomcat/bin/startup.sh
-ExecStop=/bin/kill -15 $MAINPID
-
-User=chef
-Group=chef
-
-[Install]
-WantedBy=multi-user.target
+case $1 in
+start)
+sh $CATALINA_HOME/bin/startup.sh
+;;
+stop)
+sh $CATALINA_HOME/bin/shutdown.sh
+;;
+restart)
+sh $CATALINA_HOME/bin/shutdown.sh
+sh $CATALINA_HOME/bin/startup.sh
+;;
+status)
+  pid=$(tomcat_pid)
+  if [ -n "$pid" ] ; then
+    printf "$NAME process running with pid: $pid\n"
+    exit 0
+  else
+    log_daemon_msg "$NAME Process is not running\n"
+    log_end_msg 0
+    exit 1
+  fi
+;;
+esac
+exit 0
