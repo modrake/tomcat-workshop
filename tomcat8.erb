@@ -10,21 +10,28 @@ export PATH
 CATALINA_HOME=/opt/tomcat
 
 tomcat_pid() {
-  `pgrep -f $NAME`
+  pgrep -f $CATALINA_HOME
 }
 
-case $1 in
-start)
-sh $CATALINA_HOME/bin/startup.sh
-;;
-stop)
-sh $CATALINA_HOME/bin/shutdown.sh
-;;
-restart)
-sh $CATALINA_HOME/bin/shutdown.sh
-sh $CATALINA_HOME/bin/startup.sh
-;;
-status)
+start() {
+  pid=$(tomcat_pid)
+  if [ -n "$pid" ]; then
+    echo "Tomcat is already running"
+    exit 1
+  fi
+  sudo sh $CATALINA_HOME/bin/startup.sh
+}
+
+stop() {
+  pid=$(tomcat_pid)
+  if [ -z "$pid" ]; then
+    echo "Tomcat is not running"
+    exit 1
+  fi
+  sudo sh $CATALINA_HOME/bin/shutdown.sh
+}
+
+status() {
   pid=$(tomcat_pid)
   if [ -n "$pid" ] ; then
     printf "$NAME process running with pid: $pid\n"
@@ -34,6 +41,25 @@ status)
     log_end_msg 0
     exit 1
   fi
-;;
+}
+
+case $1 in
+  start)
+    start
+    RETVAL=$?
+    ;;
+  stop)
+    stop
+    RETVAL=$?
+    ;;
+  restart)
+    stop
+    start
+    RETVAL=$?
+    ;;
+  status)
+    status
+    RETVAL=$?
+    ;;
 esac
-exit 0
+exit $RETVAL
